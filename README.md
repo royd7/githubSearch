@@ -1,4 +1,3 @@
-# githubSearch
 
 # How to Build GitSearch
 
@@ -20,7 +19,7 @@ run the client
     cd github-search
     npm i
     npm start
-    
+
 open browser and run http://localhost:4200/
 
 #Thanks roy dan
