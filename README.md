@@ -16,7 +16,7 @@ open browser and run http://localhost:44867/github
 run the client
 
     cd client
-    cd github-search
+    cd githubSearch
     npm i
     npm start
 
