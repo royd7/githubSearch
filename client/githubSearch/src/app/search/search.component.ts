@@ -25,8 +25,7 @@ export class SearchComponent {
 
   bookMark(repo: any) {
     this.http.post(`${environment.apiEndpoint}/bookmark`, repo).subscribe((e: any) => {
-
-
+      repo.isBookMark = e;
     }, e => console.log(e));
   }
 

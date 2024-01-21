@@ -21,33 +21,14 @@ namespace githubSearch.Controllers
             return "hello from git search";
         }
 
-        [HttpGet("tokenXX")]
-        public ActionResult GetToken()
-        {
-
-            // Create the signing credentials using the secret key
-            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Models.User.SECRET));
-
-            // Generate a token using the signing key
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                // Set other token parameters (issuer, audience, claims, etc.)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            string access_token = tokenHandler.WriteToken(token);
-            // Save the token in the user's session
-            HttpContext.Session.SetString("access-token", access_token);
-
-            return Ok(new { token = access_token });
-        }
-
         // GET api/<GitHubController>/5
         [Authorize]
         [HttpGet("search/")]
         public async Task<Repos> Get([FromQuery] string query)
         {
+            var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var user = Sessions.Sessions.GetString(token);
+
             string url = $"https://api.github.com/search/repositories?q={query}";
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
@@ -57,15 +38,35 @@ namespace githubSearch.Controllers
             {
                 response.EnsureSuccessStatusCode();
                 var responseBody = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<Repos>(responseBody);
+                var repos = JsonConvert.DeserializeObject<Repos>(responseBody);
+                foreach (var item in repos.items)
+                {
+                    item.isBookMark = user.Bookmarks.FirstOrDefault(e => e == item.id) > 0;
+                }
+                return repos;
             }
         }
 
         // POST api/<GitHubController>
         [Authorize]
         [HttpPost("Bookmark")]
-        public void Post([FromBody] Repo repo)
+        public bool Post([FromBody] Repo repo)
         {
+            var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+
+            var user = Sessions.Sessions.GetString(token);
+            var bookMark = user.Bookmarks.FirstOrDefault(e => e == repo.id);
+            if (bookMark > 0)
+            {
+                user.Bookmarks.Remove(bookMark);
+                return false;
+            }
+            else
+            {
+                user.Bookmarks.Add(repo.id);
+                return true;
+            }
+
         }
 
     }

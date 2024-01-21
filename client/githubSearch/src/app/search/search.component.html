@@ -15,7 +15,7 @@
       <div class="details">
         <div class="name">{{ item.name }}</div>
         <div class="username">{{ item.owner.login }}</div>
-        <button (click)="bookMark(item)">Bookmark</button>
+        <button mat-raised-button (click)="bookMark(item)" [color]="item.isBookMark == true?'primary':'accent'">{{item.isBookMark?'UnBookmark':'Bookmark'}}</button>
       </div>
     </div>
   </div>

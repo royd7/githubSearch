@@ -2,17 +2,15 @@
 {
     public class User
     {
-        public static readonly string SECRET = "AABBCC==";
-
         public string Token { get; set; }
 
-        private List<BookMark> _bookMarks;
-        public List<BookMark> Bookmarks
+        private List<int> _bookMarks;
+        public List<int> Bookmarks
         {
             get
             {
                 if (_bookMarks == null)
-                    _bookMarks = new List<BookMark>();
+                    _bookMarks = new List<int>();
                 return _bookMarks;
             }
         }

@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 export class UserService {
 
 
-  data: any;
+  data: any = localStorage.getItem('access_token');
 
   constructor(private http: HttpClient) {
     // Call the login method during service initialization
@@ -19,12 +19,13 @@ export class UserService {
     // Simulate a login process and obtain a JWT token from the server
     this.http.get<any>(`${environment.apiEndpoint}/token`).subscribe((e) => {
       this.data = e;
+      localStorage.setItem("access_token",e);
     });
   }
 
   isAuthorized() {
     // Just check if token exists
     // It not, user has never logged in current session
-    return Boolean(this.data);
+    return false;//Boolean(this.data);
   }
 }
