@@ -16,6 +16,7 @@ export class SearchComponent {
 
   }
 
+  //search repositories in github api
   searchRepos() {
     this.http.get(`${environment.apiEndpoint}/search?query=${this.query}`).subscribe((e: any) => {
       this.searchRes = e;
@@ -23,6 +24,7 @@ export class SearchComponent {
 
   }
 
+  //post bookmark state to api
   bookMark(repo: any) {
     this.http.post(`${environment.apiEndpoint}/bookmark`, repo).subscribe((e: any) => {
       repo.isBookMark = e;

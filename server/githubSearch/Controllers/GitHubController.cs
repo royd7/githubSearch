@@ -14,7 +14,7 @@ namespace githubSearch.Controllers
     [ApiController]
     public class GitHubController : ControllerBase
     {
-        // GET: api/<GitHubController>
+        // test method
         [HttpGet]
         public string Get()
         {
@@ -22,13 +22,16 @@ namespace githubSearch.Controllers
         }
 
         // GET api/<GitHubController>/5
+        //search for github repositories by name
         [Authorize]
         [HttpGet("search/")]
         public async Task<Repos> Get([FromQuery] string query)
         {
+            //get user from session
             var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             var user = Sessions.Sessions.GetString(token);
 
+            //go to github for query repos
             string url = $"https://api.github.com/search/repositories?q={query}";
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
@@ -39,6 +42,8 @@ namespace githubSearch.Controllers
                 response.EnsureSuccessStatusCode();
                 var responseBody = await response.Content.ReadAsStringAsync();
                 var repos = JsonConvert.DeserializeObject<Repos>(responseBody);
+
+                //sign the repo for bookmarks
                 foreach (var item in repos.items)
                 {
                     item.isBookMark = user.Bookmarks.FirstOrDefault(e => e == item.id) > 0;
@@ -48,13 +53,16 @@ namespace githubSearch.Controllers
         }
 
         // POST api/<GitHubController>
+        //save bookmarks or remove them
         [Authorize]
         [HttpPost("Bookmark")]
         public bool Post([FromBody] Repo repo)
         {
+            //get user session
             var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-
             var user = Sessions.Sessions.GetString(token);
+
+            //decide if add or remove bookmark based on current status
             var bookMark = user.Bookmarks.FirstOrDefault(e => e == repo.id);
             if (bookMark > 0)
             {

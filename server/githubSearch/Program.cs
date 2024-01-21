@@ -52,36 +52,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-app.MapGet("/github/token1", [AllowAnonymous] () =>
-{
-
-    var issuer = builder.Configuration["Jwt:Issuer"];
-    var audience = builder.Configuration["Jwt:Audience"];
-    var key = Encoding.ASCII.GetBytes
-    (builder.Configuration["Jwt:Key"]);
-    var tokenDescriptor = new SecurityTokenDescriptor
-    {
-        Subject = new ClaimsIdentity(new[]
-        {
-                new Claim("Id", Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Jti,
-                Guid.NewGuid().ToString())
-             }),
-        Expires = DateTime.UtcNow.AddMinutes(5),
-        Issuer = issuer,
-        Audience = audience,
-        SigningCredentials = new SigningCredentials
-        (new SymmetricSecurityKey(key),
-        SecurityAlgorithms.HmacSha512Signature)
-    };
-    var tokenHandler = new JwtSecurityTokenHandler();
-    var token = tokenHandler.CreateToken(tokenDescriptor);
-    var jwtToken = tokenHandler.WriteToken(token);
-    return Results.Ok(jwtToken);
-
-});
-
+// authenticate use with jwt token based on custom session
 app.MapGet("/github/token", [AllowAnonymous] async (context) =>
 {
     var token = context.Request.Headers["Authorization"]
