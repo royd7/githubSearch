@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { UserService } from 'src/app/services/user.service';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
-import { SearchComponent } from 'src/app/search/search.component';
+import { SearchComponent } from 'src/app/components/search/search.component';
 import { FormsModule } from '@angular/forms';
 import { AuthInterceptor } from 'src/app/services/auth-interceptor';
 import { AuthGuard } from './services/auth.guard.service';
@@ -14,10 +14,14 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input'; 
+import { MatMenuModule } from '@angular/material/menu';
+import { BookmarkComponent } from './components/bookmark/bookmark.component'; 
+
+
 
 @NgModule({
   declarations: [
-    AppComponent, SearchComponent
+    AppComponent, SearchComponent, BookmarkComponent
   ],
   imports: [
     HttpClientModule,
@@ -26,9 +30,10 @@ import { MatInputModule } from '@angular/material/input';
     FormsModule,
     BrowserAnimationsModule,
     MatToolbarModule,
+    MatMenuModule,
     MatButtonModule,
     MatIconModule,
-    MatInputModule 
+    MatInputModule
   ],
   providers: [
     UserService, AuthGuard,

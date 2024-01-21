@@ -305,7 +305,21 @@
 
 <!-- Toolbar -->
 <mat-toolbar color="primary">
-  <mat-icon>menu</mat-icon>
+  <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger" (mouseover)="menuTrigger.openMenu()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu" [overlapTrigger]="false">
+    <span (mouseleave)="menuTrigger.closeMenu()">
+      <button mat-menu-item [routerLink]="['/']">
+        <mat-icon>home</mat-icon>
+        <span>Home</span>
+      </button>
+      <button mat-menu-item [routerLink]="['bookmark']">
+        <mat-icon>bookmarks</mat-icon>
+        <span>Bookmarks</span>
+      </button>
+    </span>
+  </mat-menu>
   <span>Welcome to {{title}}</span>
   <span class="spacer"></span>
 </mat-toolbar>

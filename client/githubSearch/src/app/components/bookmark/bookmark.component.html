@@ -1,0 +1,12 @@
+<div *ngIf="bookMarks" class="results-container">
+    <div *ngFor="let item of bookMarks" class="result-item">
+      <div class="avatar-container">
+        <img [src]="item.owner.avatar_url" class="avatar">
+      </div>
+      <div class="details">
+        <div class="name">{{ item.name }}</div>
+        <div class="username">{{ item.owner.login }}</div>
+        <button mat-raised-button color="primary" (click)="bookMark(item)">UnBookmark</button>
+      </div>
+    </div>
+  </div>

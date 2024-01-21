@@ -4,13 +4,13 @@
     {
         public string Token { get; set; }
 
-        private List<int> _bookMarks;
-        public List<int> Bookmarks
+        private List<Repo> _bookMarks;
+        public List<Repo> Bookmarks
         {
             get
             {
                 if (_bookMarks == null)
-                    _bookMarks = new List<int>();
+                    _bookMarks = new List<Repo>();
                 return _bookMarks;
             }
         }

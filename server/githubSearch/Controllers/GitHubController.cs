@@ -46,7 +46,7 @@ namespace githubSearch.Controllers
                 //sign the repo for bookmarks
                 foreach (var item in repos.items)
                 {
-                    item.isBookMark = user.Bookmarks.FirstOrDefault(e => e == item.id) > 0;
+                    item.isBookMark = user.Bookmarks.FirstOrDefault(e => e.id == item.id) != null;
                 }
                 return repos;
             }
@@ -63,17 +63,32 @@ namespace githubSearch.Controllers
             var user = Sessions.Sessions.GetString(token);
 
             //decide if add or remove bookmark based on current status
-            var bookMark = user.Bookmarks.FirstOrDefault(e => e == repo.id);
-            if (bookMark > 0)
+            var bookMark = user.Bookmarks.FirstOrDefault(e => e.id == repo.id);
+            if (bookMark != null)
             {
                 user.Bookmarks.Remove(bookMark);
                 return false;
             }
             else
             {
-                user.Bookmarks.Add(repo.id);
+                user.Bookmarks.Add(repo);
                 return true;
             }
+
+        }
+
+        // POST api/<GitHubController>
+        //save bookmarks or remove them
+        [Authorize]
+        [HttpGet("Bookmark/Me")]
+        public List<Repo> GetMyRepos()
+        {
+            //get user session
+            var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var user = Sessions.Sessions.GetString(token);
+
+            //decide if add or remove bookmark based on current status
+            return user.Bookmarks;
 
         }
 
