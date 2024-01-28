@@ -4,6 +4,8 @@
     cd projects
     git clone https://github.com/royd7/githubSearch.git
 
+# How to Run GitSearch
+
 run the server
 
     cd server
@@ -21,6 +23,17 @@ run the client
     npm start
 
 open browser and run http://localhost:4200/
+
+
+# Or run on docker
+
+    docker build -t githubsearch .
+    docker run -p 44867:80 -p 4200:4200 githubsearch
+
+open browser and run http://localhost:44867/github
+open browser and run http://localhost:4200/
+
+
 
 #Thanks roy dan
 
